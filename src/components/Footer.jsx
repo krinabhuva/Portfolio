@@ -40,7 +40,7 @@ export default function Footer({ contactInfo }) {
           <div className="footer-right">
             <h3>Quick Links</h3>
             <div className="footer-links">
-              {['Home', 'About', 'Skills', 'Projects', 'Certifications'].map((item) => (
+              {['Home', 'About', 'Skills'].map((item) => (
                 <a key={item} href={`#${item.toLowerCase()}`} className="footer-link" onClick={(e) => scrollTo(e, `#${item.toLowerCase()}`)}>
                   {item}
                 </a>

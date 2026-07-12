@@ -1,12 +1,17 @@
 import './Header.css';
 
-export default function Header({ name, role }) {
+export default function Header({ name, role, themeColor }) {
   const [firstName, ...rest] = name.split(' ');
   const lastName = rest.join(' ');
   const roles = role.split('|').map((r) => r.trim());
 
+  /* Supplementary: themeColor applied as an inline style */
+  const themeOverlay = {
+    boxShadow: `0 0 120px ${themeColor}33, inset 0 0 120px ${themeColor}11`,
+  };
+
   return (
-    <section className="header" id="home">
+    <section className="header" id="home" style={themeOverlay}>
       <div className="container">
         <div className="header-content">
           <div className="header-text">
