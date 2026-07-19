@@ -1,1 +1,77 @@
 /* App-level styles — minimal, mostly handled by index.css and component CSS */
+
+/* ===== LIGHT MODE COLORS ===== */
+body.light-mode {
+  --bg: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --text: #0F172A;
+  --text-secondary: #475569;
+  --gradient-hero: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 8px 40px rgba(99, 102, 241, 0.12);
+}
+
+/* Header/Hero background light mode override */
+body.light-mode .header {
+  background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 25%, #CBD5E1 50%, #E2E8F0 75%, #F8FAFC 100%);
+}
+
+/* Navbar light mode override */
+body.light-mode .navbar {
+  background: rgba(248, 250, 252, 0.85);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+body.light-mode .navbar.scrolled {
+  background: rgba(248, 250, 252, 0.95);
+}
+body.light-mode .hamburger span {
+  background: var(--text);
+}
+body.light-mode .nav-links {
+  background: rgba(248, 250, 252, 0.98);
+}
+body.light-mode .back-to-top {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+}
+
+/* Footer light mode override */
+body.light-mode .footer {
+  background: linear-gradient(180deg, var(--bg) 0%, #e2e8f0 100%);
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+/* ===== THEME TOGGLE BUTTON ===== */
+.theme-toggle {
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--text);
+  margin-left: 12px;
+}
+
+.theme-toggle:hover {
+  background: rgba(99, 102, 241, 0.2);
+  transform: scale(1.05);
+}
+
+body.light-mode .theme-toggle {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.15);
+}
+
+@media (max-width: 768px) {
+  .theme-toggle {
+    margin-left: 20px;
+    margin-top: 10px;
+    align-self: flex-start;
+  }
+}

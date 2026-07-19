@@ -1,8 +1,14 @@
+import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import About from './components/About';
 import Skills from './components/Skills';
 import Footer from './components/Footer';
+import Projects from './components/Projects';
+import Contact from './components/Contact';
+import NotFound from './components/NotFound';
+import './App.css';
 
 // ——— Data passed as props ———
 const name = 'Krina Bhuva';
@@ -20,6 +26,27 @@ const skillList = [
   'SQL',
 ];
 
+const projects = [
+  {
+    title: 'Student Attendance System using Live Location',
+    subtitle: '4th Semester Team Project',
+    stack: 'Next.js, Node.js, Express.js, MongoDB',
+    points: [
+      'Smart attendance system using geofencing for live location-based attendance',
+      'Admin sets classroom boundary; system checks if student is inside',
+      'Features automatic attendance marking, student dashboard, and admin panel',
+      'My contribution: frontend UI, database schema, and system logic',
+    ],
+    github: null,
+  },
+  { title: 'Gen_AI', stack: 'Python', points: ['https://github.com/krinabhuva/Gen_AI','Gen AI by python and Gemini API key'], github: 'https://github.com/krinabhuva/Gen_AI' },
+  { title: 'Sramana', stack: 'Frontend',  points: ['https://github.com/krinabhuva/Sramana','Yoga Website'], github: 'https://github.com/krinabhuva/Sramana' },
+  { title: 'Expense Analyzer', stack: 'Python',  points: ['https://github.com/krinabhuva/expense_analyzer','Analyze expenses and give data related to this'], github: 'https://github.com/krinabhuva/expense_analyzer' },
+  { title: 'Student Marks Analyzer', stack: 'Python', points: ['https://github.com/krinabhuva/student_marks_analyzer','Analyze student marks and calculate maximum, minimum, average, etc. math operations'], github: 'https://github.com/krinabhuva/student_marks_analyzer' },
+  { title: 'Calculator using Python', stack: 'Python', points: ['https://github.com/krinabhuva/calculator_using_python','calculator using python'], github: 'https://github.com/krinabhuva/calculator_using_python' },
+  { title: 'Oil E-Commerce Hub', stack: 'Web', points: ['https://github.com/krinabhuva/oil-Ecommerce-Hub','for oil treding '], github: 'https://github.com/krinabhuva/oil-Ecommerce-Hub' },
+];
+
 const contactInfo = {
   name: 'Krina Bhuva',
   email: 'bhuvakrina0708@gmail.com',
@@ -28,12 +55,35 @@ const contactInfo = {
 };
 
 export default function App() {
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  useEffect(() => {
+    if (isLightMode) {
+      document.body.classList.add('light-mode');
+    } else {
+      document.body.classList.remove('light-mode');
+    }
+  }, [isLightMode]);
+
+  const toggleDarkMode = () => {
+    setIsLightMode(!isLightMode);
+  };
+
   return (
     <>
-      <Navbar />
-      <Header name={name} role={role} themeColor={themeColor} />
-      <About />
-      <Skills skillList={skillList} />
+      <Navbar isLightMode={isLightMode} toggleDarkMode={toggleDarkMode} />
+      <Routes>
+        <Route path="/" element={
+          <>
+            <Header name={name} role={role} themeColor={themeColor} />
+            <About />
+            <Skills skillList={skillList} />
+          </>
+        } />
+        <Route path="/projects" element={<Projects projects={projects} />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       <Footer contactInfo={contactInfo} />
     </>
   );

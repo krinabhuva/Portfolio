@@ -1,58 +1,52 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
-const navItems = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Contact', href: '#contact' },
-];
-
-export default function Navbar() {
+export default function Navbar({ isLightMode, toggleDarkMode }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-      const sections = navItems.map((item) => item.href.slice(1));
-      let current = 'home';
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= 120) {
-          current = id;
-        }
-      }
-      setActiveSection(current);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollTo = (e, href) => {
-    e.preventDefault();
-    setMenuOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} id="navbar">
       <div className="container">
-        <a href="#home" className="nav-logo" onClick={(e) => scrollTo(e, '#home')}>
+        <Link to="/" className="nav-logo" onClick={() => setMenuOpen(false)}>
           Portfolio
-        </a>
+        </Link>
         <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={`nav-link ${activeSection === item.href.slice(1) ? 'active' : ''}`}
-              onClick={(e) => scrollTo(e, item.href)}
-            >
-              {item.label}
-            </a>
-          ))}
+          <Link
+            to="/"
+            className={`nav-link ${currentPath === '/' ? 'active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            Home
+          </Link>
+          <Link
+            to="/projects"
+            className={`nav-link ${currentPath === '/projects' ? 'active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            Projects
+          </Link>
+          <Link
+            to="/contact"
+            className={`nav-link ${currentPath === '/contact' ? 'active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            Contact
+          </Link>
+          <button className="theme-toggle" onClick={toggleDarkMode} aria-label="Toggle theme">
+            {isLightMode ? '🌙' : '☀️'}
+          </button>
         </div>
         <button
           className={`hamburger ${menuOpen ? 'open' : ''}`}

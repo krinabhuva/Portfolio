@@ -1,3 +1,4 @@
+import profileImg from '../assets/profile.jpeg';
 import './Header.css';
 
 export default function Header({ name, role, themeColor }) {
@@ -33,18 +34,13 @@ export default function Header({ name, role, themeColor }) {
               and database systems.
             </p>
             <div className="header-buttons">
-              <a href="#contact" className="btn btn-primary" onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-              }}>
-                ✉ Contact Me
-              </a>
+
 
             </div>
           </div>
           <div className="header-image">
             <div className="profile-image-wrapper">
-              <div className="profile-placeholder">{name.charAt(0)}</div>
+              <img className="profile-image" src={profileImg} alt={name} />
             </div>
           </div>
         </div>
