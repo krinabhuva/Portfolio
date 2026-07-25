@@ -1,38 +1,56 @@
-/* ===== HEADER / HERO ===== */
+/* ===== HEADER / HERO SECTION - WARM COSMIC REDESIGN ===== */
 .header {
   min-height: 100vh;
   display: flex;
   align-items: center;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #0F172A 0%, #1a1a4e 25%, #2d1b69 50%, #1e1145 75%, #0F172A 100%);
-  background-size: 400% 400%;
-  animation: gradientShift 12s ease infinite;
+  background: 
+    radial-gradient(ellipse at 50% 35%, rgba(109, 40, 217, 0.45) 0%, rgba(42, 23, 78, 0.75) 50%, rgba(21, 9, 43, 0.95) 100%),
+    linear-gradient(135deg, #2A174E 0%, #15092B 50%, #2A174E 100%);
   padding-top: var(--nav-height);
 }
 
+/* Corner Radial Gradient Blob 1 (Soft Coral & Orchid Glow) */
 .header::before {
   content: '';
   position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+  top: -15%;
+  right: -10%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(255, 122, 138, 0.22) 0%, rgba(168, 85, 247, 0.16) 45%, transparent 70%);
+  filter: blur(65px);
   border-radius: 50%;
   pointer-events: none;
+  animation: heroBlobPulse 16s ease-in-out infinite alternate;
 }
 
+/* Corner Radial Gradient Blob 2 (Peach Gold & Royal Purple Glow) */
 .header::after {
   content: '';
   position: absolute;
-  bottom: -30%;
+  bottom: -15%;
   left: -10%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 200, 87, 0.22) 0%, rgba(109, 40, 217, 0.18) 50%, transparent 70%);
+  filter: blur(65px);
   border-radius: 50%;
   pointer-events: none;
+  animation: heroBlobPulse 20s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes heroBlobPulse {
+  0% {
+    transform: scale(1) translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.12) translate(15px, -15px) rotate(10deg);
+  }
+  100% {
+    transform: scale(0.95) translate(-10px, 10px) rotate(-5deg);
+  }
 }
 
 .header-content {
@@ -124,26 +142,29 @@
   overflow: hidden;
 }
 
+/* Button: Soft Coral → Peach Gold Gradient */
 .btn-primary {
-  background: var(--gradient-primary);
-  color: var(--text);
-  box-shadow: 0 4px 20px rgba(99,102,241,0.35);
+  background: linear-gradient(135deg, #FF7A8A 0%, #FFC857 100%);
+  color: #15092B;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(255, 122, 138, 0.4);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(99,102,241,0.5);
+  box-shadow: 0 8px 30px rgba(255, 200, 87, 0.55);
 }
 
 .btn-secondary {
   background: transparent;
-  color: var(--text);
-  border: 2px solid rgba(99,102,241,0.5);
+  color: #FFFFFF;
+  border: 2px solid rgba(255, 122, 138, 0.5);
 }
 
 .btn-secondary:hover {
-  border-color: var(--primary);
-  background: rgba(99,102,241,0.1);
+  border-color: #FFC857;
+  color: #FFC857;
+  background: rgba(255, 122, 138, 0.12);
   transform: translateY(-2px);
 }
 
@@ -151,7 +172,7 @@
   font-size: 1.1rem;
 }
 
-/* Profile image */
+/* Profile Image Container */
 .header-image {
   display: flex;
   justify-content: center;
@@ -166,21 +187,25 @@
   animation: float 6s ease-in-out infinite;
 }
 
+/* Soft Golden Glow behind profile image (Peach Gold & Cream Glow) */
 .profile-image-wrapper::before {
   content: '';
   position: absolute;
-  inset: -6px;
+  inset: -18px;
   border-radius: 50%;
-  background: var(--gradient-primary);
-  animation: pulseGlow 3s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(255, 200, 87, 0.75) 0%, rgba(255, 244, 214, 0.55) 30%, rgba(255, 122, 138, 0.35) 65%, transparent 80%);
+  filter: blur(20px);
+  opacity: 0.85;
+  animation: pulseGlow 4s ease-in-out infinite alternate;
 }
 
+/* Ring border around avatar */
 .profile-image-wrapper::after {
   content: '';
   position: absolute;
-  inset: 3px;
+  inset: -2px;
   border-radius: 50%;
-  background: var(--bg);
+  background: var(--gradient-primary);
 }
 
 .profile-image {
@@ -190,7 +215,8 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid var(--card-bg);
+  border: 3px solid rgba(42, 23, 78, 0.9);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .profile-placeholder {
@@ -225,11 +251,11 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(99,102,241,0.3);
+  background: rgba(255, 122, 138, 0.3);
 }
 
 .header-dot:nth-child(2) {
-  background: var(--primary);
+  background: var(--accent);
 }
 
 /* ===== RESPONSIVE ===== */

@@ -1,19 +1,21 @@
-/* ===== CONTACT SECTION ===== */
+/* ===== CONTACT SECTION REDESIGN ===== */
 .contact {
-  background: var(--bg);
+  background: transparent;
 }
 
 .contact-card-container {
   max-width: 600px;
   margin: 0 auto;
   background: var(--card-bg);
-  border: 1px solid rgba(99, 102, 241, 0.1);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius);
   padding: 40px;
   box-shadow: var(--shadow-card);
   transition: all var(--transition);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .contact-card-container::before {
@@ -27,7 +29,7 @@
 }
 
 .contact-card-container:hover {
-  border-color: rgba(99, 102, 241, 0.3);
+  border-color: rgba(124, 58, 237, 0.35);
   box-shadow: var(--shadow-hover);
 }
 
@@ -54,8 +56,8 @@
 .form-control {
   padding: 14px 20px;
   border-radius: var(--radius-sm);
-  background: rgba(15, 23, 42, 0.3);
-  border: 1px solid rgba(99, 102, 241, 0.15);
+  background: rgba(11, 15, 25, 0.5);
+  border: 1px solid rgba(124, 58, 237, 0.2);
   color: var(--text);
   font-family: inherit;
   font-size: 0.95rem;
@@ -63,16 +65,10 @@
   width: 100%;
 }
 
-.light-mode .form-control {
-  background: rgba(248, 250, 252, 0.8);
-  border-color: rgba(99, 102, 241, 0.25);
-  color: var(--text);
-}
-
 .form-control:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
 }
 
 textarea.form-control {
@@ -83,7 +79,7 @@ textarea.form-control {
 .display-box {
   margin-top: 32px;
   padding: 24px;
-  background: rgba(99, 102, 241, 0.05);
+  background: rgba(124, 58, 237, 0.08);
   border-left: 4px solid var(--accent);
   border-radius: var(--radius-xs);
   display: flex;
@@ -113,7 +109,7 @@ textarea.form-control {
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  border-top: 1px solid rgba(99, 102, 241, 0.1);
+  border-top: 1px solid rgba(124, 58, 237, 0.15);
   padding-top: 24px;
 }
 
