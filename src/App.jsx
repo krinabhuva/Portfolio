@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import NotFound from './components/NotFound';
+import DigitalMindscape from './components/DigitalMindscape';
 import './App.css';
 
 // ——— Data passed as props ———
@@ -36,6 +37,19 @@ const projects = [
       'Admin sets classroom boundary; system checks if student is inside',
       'Features automatic attendance marking, student dashboard, and admin panel',
       'My contribution: frontend UI, database schema, and system logic',
+    ],
+    github: null,
+  },
+  {
+    title: 'Building a RESTful API with Node.js and Express',
+    subtitle: 'Practical 4 · Academic Practical',
+    stack: 'Node.js, Express.js, JavaScript, Postman/Thunder Client',
+    points: [
+      'Built a Task Management REST API with complete CRUD operations using an in-memory array',
+      'Implemented global request logging middleware, Express routing, task ID validation middleware, JSON parsing, Content-Type validation for POST/PUT, and custom 404 handling',
+      'API Endpoints: GET /tasks, POST /tasks, PUT /tasks/:id, DELETE /tasks/:id',
+      'Architecture: Client → Logging Middleware → Express Router → CRUD Operations → Global Error Handler',
+      'Key Learnings: REST API design, Express middleware pipeline, request lifecycle, CRUD, HTTP methods/status codes, centralized error handling, and backend development',
     ],
     github: null,
   },
@@ -71,6 +85,7 @@ export default function App() {
 
   return (
     <>
+      <DigitalMindscape />
       <Navbar isLightMode={isLightMode} toggleDarkMode={toggleDarkMode} />
       <Routes>
         <Route path="/" element={

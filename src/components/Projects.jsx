@@ -26,6 +26,22 @@ const defaultProjects = [
     github: null,
   },
   {
+    title: 'Building a RESTful API with Node.js and Express',
+    subtitle: 'Practical 4 · Academic Practical',
+    stack: 'Node.js, Express.js, JavaScript, Postman/Thunder Client',
+    language: 'JavaScript',
+    stars: 0,
+    forks: 0,
+    points: [
+      'Built a Task Management REST API with complete CRUD operations using an in-memory array',
+      'Implemented global request logging middleware, Express routing, task ID validation middleware, JSON parsing, Content-Type validation for POST/PUT, and custom 404 handling',
+      'API Endpoints: GET /tasks, POST /tasks, PUT /tasks/:id, DELETE /tasks/:id',
+      'Architecture: Client → Logging Middleware → Express Router → CRUD Operations → Global Error Handler',
+      'Key Learnings: REST API design, Express middleware pipeline, request lifecycle, CRUD, HTTP methods/status codes, centralized error handling, and backend development',
+    ],
+    github: null,
+  },
+  {
     title: 'Gen_AI',
     subtitle: 'Internship Project',
     stack: 'Python',
