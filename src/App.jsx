@@ -9,6 +9,7 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import NotFound from './components/NotFound';
 import DigitalMindscape from './components/DigitalMindscape';
+import TaskManager from './components/TaskManager';
 import './App.css';
 
 // ——— Data passed as props ———
@@ -29,6 +30,20 @@ const skillList = [
 
 const projects = [
   {
+    title: 'React + Node + MongoDB Task Manager',
+    subtitle: 'Practical 6 · Full-Stack Web Application',
+    stack: 'React (Vite), Axios, Node.js, Express.js, MongoDB, Mongoose, CORS',
+    points: [
+      'Full-Stack CRUD application connecting React (Vite) frontend with Express + MongoDB REST API backend',
+      'Implemented async task fetching on mount via Axios, with interactive loading spinner and server connection error handling',
+      'Complete CRUD operations: Add new task (POST), toggle complete / inline edit title (PUT), and delete task (DELETE)',
+      'Built a custom Delete Confirmation Modal dialog to prevent accidental task deletions',
+      'Designed auto-dismissing Toast Notifications for instant success/error user feedback',
+      'Ensured full persistent data storage in MongoDB across browser refreshes',
+    ],
+    github: null,
+  },
+  {
     title: 'Student Attendance System using Live Location',
     subtitle: '4th Semester Team Project',
     stack: 'Next.js, Node.js, Express.js, MongoDB',
@@ -37,6 +52,19 @@ const projects = [
       'Admin sets classroom boundary; system checks if student is inside',
       'Features automatic attendance marking, student dashboard, and admin panel',
       'My contribution: frontend UI, database schema, and system logic',
+    ],
+    github: null,
+  },
+  {
+    title: 'Express Task Manager API with MongoDB & Mongoose',
+    subtitle: 'Practical 5 · Academic Practical',
+    stack: 'Node.js, Express.js, MongoDB, Mongoose, dotenv',
+    points: [
+      'Extended Express Task Manager REST API with MongoDB & Mongoose ODM for persistent storage',
+      'Created Mongoose Task schema (title, description, completed, createdAt, priority enum) with a pre-save hook to trim title',
+      'Refactored CRUD endpoints (GET /tasks, GET /tasks/:id, POST /tasks, PUT /tasks/:id, DELETE /tasks/:id) with async/await, try/catch, and next(err)',
+      'Implemented clean JSON validation error handling, Mongoose CastError handling, and a centralized global error handler',
+      'Configured environment variables with dotenv and provided .env.example',
     ],
     github: null,
   },
@@ -95,6 +123,8 @@ export default function App() {
             <Skills skillList={skillList} />
           </>
         } />
+        <Route path="/tasks" element={<TaskManager />} />
+        <Route path="/task-manager" element={<TaskManager />} />
         <Route path="/projects" element={<Projects projects={projects} />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />

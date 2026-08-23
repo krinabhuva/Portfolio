@@ -31,6 +31,13 @@ export default function Navbar({ isLightMode, toggleDarkMode }) {
             Home
           </Link>
           <Link
+            to="/tasks"
+            className={`nav-link ${currentPath === '/tasks' || currentPath === '/task-manager' ? 'active' : ''}`}
+            onClick={() => setMenuOpen(false)}
+          >
+            Task Manager
+          </Link>
+          <Link
             to="/projects"
             className={`nav-link ${currentPath === '/projects' ? 'active' : ''}`}
             onClick={() => setMenuOpen(false)}

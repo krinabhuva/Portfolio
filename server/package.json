@@ -1,7 +1,7 @@
 {
-  "name": "practical4-backend",
+  "name": "practical5-backend",
   "version": "1.0.0",
-  "description": "Task Management REST API - Node.js + Express Practical 4 Backend",
+  "description": "Task Management REST API - Node.js + Express + MongoDB + Mongoose Practical 5 Backend",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.1"
   }
 }
