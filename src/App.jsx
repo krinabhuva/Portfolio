@@ -1,16 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import About from './components/About';
 import Skills from './components/Skills';
 import Footer from './components/Footer';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
 import NotFound from './components/NotFound';
 import DigitalMindscape from './components/DigitalMindscape';
-import TaskManager from './components/TaskManager';
+import Loading from './components/Loading';
 import './App.css';
+
+// Lazy-loaded route components for Practical 8
+const Projects = lazy(() => import('./components/Projects'));
+const Contact = lazy(() => import('./components/Contact'));
+const TaskManager = lazy(() => import('./components/TaskManager'));
 
 // ——— Data passed as props ———
 const name = 'Krina Bhuva';
@@ -115,20 +118,22 @@ export default function App() {
     <>
       <DigitalMindscape />
       <Navbar isLightMode={isLightMode} toggleDarkMode={toggleDarkMode} />
-      <Routes>
-        <Route path="/" element={
-          <>
-            <Header name={name} role={role} themeColor={themeColor} />
-            <About />
-            <Skills skillList={skillList} />
-          </>
-        } />
-        <Route path="/tasks" element={<TaskManager />} />
-        <Route path="/task-manager" element={<TaskManager />} />
-        <Route path="/projects" element={<Projects projects={projects} />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={<Loading message="Loading page..." />}>
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Header name={name} role={role} themeColor={themeColor} />
+              <About />
+              <Skills skillList={skillList} />
+            </>
+          } />
+          <Route path="/tasks" element={<TaskManager />} />
+          <Route path="/task-manager" element={<TaskManager />} />
+          <Route path="/projects" element={<Projects projects={projects} />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
       <Footer contactInfo={contactInfo} />
     </>
   );
