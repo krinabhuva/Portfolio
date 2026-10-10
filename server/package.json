@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "test:cache": "node test-performance.js",
+    "test:events": "node test-practical10.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -14,6 +16,7 @@
     "dotenv": "^16.6.1",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^8.5.1"
+    "mongoose": "^8.5.1",
+    "node-cache": "^5.1.2"
   }
 }
