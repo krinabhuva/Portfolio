@@ -1,0 +1,556 @@
+================================================================================
+                      FULL-STACK PORTFOLIO & TASK MANAGER
+                       COMPREHENSIVE PROJECT AUDIT REPORT
+================================================================================
+Generated: 2026-10-28
+Auditor: Senior Full-Stack Developer & Software Systems Auditor
+Repository Root: d:\5IT\AWD\Portfolio
+Remote Repository: https://github.com/krinabhuva/Portfolio
+Active Branch: main
+Audit File Location: d:\5IT\AWD\Portfolio\PORTFOLIO_AUDIT.txt
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. PROJECT PURPOSE, TECHNOLOGIES & CURRENT FUNCTIONALITY
+--------------------------------------------------------------------------------
+1.1 Project Purpose:
+The project is a multi-tier academic and professional portfolio created by Krina
+Bhuva for the Advanced Web Development (AWD) course (Practicals 4 through 11).
+It serves a dual purpose:
+  a) A professional developer portfolio showcasing bio, skills, featured projects,
+     contact details, and a live GitHub repository feed.
+  b) A laboratory testbed for progressive web engineering concepts: REST API design
+     (P4), MongoDB/Mongoose integration (P5), React CRUD frontend (P6), JWT Bearer
+     authentication (P7), React code-splitting/lazy-loading (P8), in-memory cache
+     optimization with node-cache (P9), asynchronous decoupled event notification
+     with Node.js EventEmitter (P10), and multi-container Dockerization (P11).
+
+1.2 Technology Stack:
+  - Frontend Core: React 19.2.7, React DOM 19.2.7, React Router DOM 7.18.1.
+  - Frontend Build & Dev: Vite 8.1.4, @vitejs/plugin-react 6.0.3, Oxlint 1.71.0.
+  - Frontend Styling: Vanilla CSS with custom properties (CSS variables), glassmorphism,
+    responsive media queries, dark/light mode toggle, and an interactive HTML5
+    Canvas simulation (DigitalMindscape).
+  - Backend Core: Node.js 22.15.0 (ES Modules, "type": "module"), Express.js 4.19.2.
+  - Backend Storage: MongoDB 7.0 via Mongoose 8.5.1 ODM.
+  - Authentication: JSON Web Tokens (jsonwebtoken 9.0.3) + bcryptjs 3.0.3 password hashing.
+  - Performance & Architecture: node-cache 5.1.2 (in-memory caching with TTL = 60s),
+    native Node.js EventEmitter (decoupled async notification worker).
+  - Containerization: Docker (node:20-alpine base images) & Docker Compose (v2).
+  - Testing & Verification: Jest 30.5.2, Supertest 7.3.1 (installed in server),
+    custom CLI benchmark scripts (test-performance.js, test-practical10.js,
+    test-api-verification.js).
+
+1.3 Current Functionality:
+  - Homepage (/): Displays hero greeting, profile photo, bio cards, areas of
+    interest, strengths, and skills grid.
+  - Projects Page (/projects): Displays static featured projects list and fetches
+    live GitHub repositories via GitHub REST API with real-time search filtering.
+  - Contact Page (/contact): Controlled input demonstration with live two-way
+    binding display and character counter.
+  - Task Manager Page (/tasks, /task-manager): Full CRUD interface structure (add,
+    toggle complete, inline edit, delete with modal, filter tabs, toast alerts).
+  - Backend REST API: Full CRUD endpoints for tasks (/tasks), user authentication
+    (/register, /login, /me), cache monitoring (/debug/cache), and cache benchmarking
+    (/debug/cache/benchmark).
+
+
+--------------------------------------------------------------------------------
+2. FOLDER / FILE MAP & ROLE OF IMPORTANT FILES
+--------------------------------------------------------------------------------
+Portfolio/
+├── .dockerignore                 # Excludes node_modules/dist from root Docker build
+├── .gitignore                    # Git ignore rules for root (node_modules, dist, .env)
+├── .oxlintrc.json                # Linter configuration for Oxlint
+├── Dockerfile                    # Container definition for React/Vite frontend (node:20-alpine)
+├── docker-compose.yml            # Multi-container orchestration (mongo:7.0, backend, frontend)
+├── index.html                    # Single Page Application HTML shell with Google Fonts
+├── MATURITY.md                   # Richardson Maturity Model Level 2 evaluation documentation
+├── package.json                  # Frontend manifest (scripts: dev, build, lint, preview)
+├── package-lock.json             # Locked dependency tree for root
+├── vite.config.js                # Vite configuration (port 3000, 0.0.0.0 host, /api proxy)
+├── PRACTICAL6_README.md          # Practical 6 documentation (React CRUD + MongoDB)
+├── PRACTICAL7_README.md          # Practical 7 documentation (JWT Auth + Validation)
+├── PRACTICAL9_README.md          # Practical 9 documentation (In-Memory Caching)
+├── PRACTICAL10_README.md         # Practical 10 documentation (Node EventEmitter)
+├── PRACTICAL11_README.md         # Practical 11 documentation (Docker Containerization)
+├── README.md                     # Central repository README and quickstart guide
+│
+├── src/                          # Frontend React Source Code
+│   ├── main.jsx                  # React application entry point (ReactDOM + BrowserRouter)
+│   ├── App.jsx                   # Main layout container, route definitions, theme state
+│   ├── App.css                   # App-level styling & light mode overrides
+│   ├── index.css                 # Global CSS reset, color tokens, animations, utility classes
+│   ├── api.js                    # Axios API client configured with BASE_URL (/api)
+│   ├── assets/
+│   │   └── profile.jpeg          # Profile picture used in Hero Header
+│   └── components/
+│       ├── Navbar.jsx / .css     # Sticky responsive navigation bar with theme toggle & mobile menu
+│       ├── Header.jsx / .css     # Hero presentation banner with name, roles, and profile image
+│       ├── About.jsx / .css      # Biography, educational history, internship details, badges
+│       ├── Skills.jsx / .css     # 8-card technical skills showcase
+│       ├── Projects.jsx / .css   # Featured projects + live GitHub repository API feed
+│       ├── RepoCard.jsx / .css   # Individual repository card with stars, forks, links
+│       ├── Contact.jsx / .css    # Interactive controlled form demonstrating state synchronization
+│       ├── Footer.jsx / .css     # Footer component with socials, copyright, and back-to-top
+│       ├── TaskManager.jsx / .css# Task Manager CRUD UI with modal, filter tabs, toasts
+│       ├── DigitalMindscape.jsx  # Interactive background canvas simulation (orbs, waves, parallax)
+│       ├── DigitalMindscape.css  # Fixed positioning & ambient layer styles for background
+│       ├── Spinner.jsx / .css    # Animated multi-ring loading indicator
+│       ├── Loading.jsx           # Suspense fallback wrapper component
+│       ├── ErrorMessage.jsx/.css # Error notification card with retry button
+│       ├── NotFound.jsx / .css   # 404 route fallback component
+│       └── WatercolorPortrait.jsx# UNUSED component (dead code)
+│
+└── server/                       # Backend Express REST API Source Code
+    ├── .dockerignore             # Excludes node_modules/.env from backend Docker build
+    ├── .env                      # Local environment variables (PORT, MONGO_URI, JWT_SECRET)
+    ├── .env.example              # Template environment file for deployment and onboarding
+    ├── .gitignore                # Git ignore rules for server directory
+    ├── Dockerfile                # Container definition for Express backend (node:20-alpine)
+    ├── package.json              # Backend manifest (scripts: start, dev, test:cache, test:events)
+    ├── package-lock.json         # Locked dependency tree for backend
+    ├── server.js                 # Express server initialization, DB connection, routing
+    ├── test-api-verification.js  # Automated standalone verification script for Practical 9 API
+    ├── test-performance.js       # CLI benchmark script for cache HIT vs MISS latency
+    ├── test-practical10.js       # Standalone test script for EventEmitter async notifications
+    ├── config/
+    │   ├── db.js                 # Mongoose connection configuration with error handling
+    │   └── cache.js              # NodeCache instance, hit/miss counters, get/set/flush helpers
+    ├── controllers/
+    │   ├── authController.js     # User registration, login, and profile fetching
+    │   ├── debugController.js    # Cache metrics reporting, manual flush, HTTP benchmark
+    │   └── taskController.js     # Task CRUD logic integrated with cache & event emitter
+    ├── middleware/
+    │   ├── authMiddleware.js     # JWT Bearer token authentication guard (protect)
+    │   ├── errorHandler.js       # 404 notFoundHandler and 500 centralized errorHandler
+    │   └── validationMiddleware.js# Input sanitization and title validation middleware
+    ├── models/
+    │   ├── Task.js               # Mongoose schema for tasks (title, priority, completed, timestamps)
+    │   └── User.js               # Mongoose schema for users (email, password hash pre-save hook)
+    ├── routes/
+    │   ├── authRoutes.js         # Public /register, /login and protected /me routes
+    │   ├── debugRoutes.js        # /debug/cache, /debug/cache/benchmark routes
+    │   └── taskRoutes.js         # Protected CRUD routes for /tasks
+    └── services/
+        └── notificationService.js# EventEmitter implementation for decoupled async task alerts
+
+
+--------------------------------------------------------------------------------
+3. WORKING FEATURES, PARTIALLY WORKING FEATURES & BROKEN FEATURES
+--------------------------------------------------------------------------------
+3.1 Working Features:
+  [OK] Production Frontend Build: `npm run build` succeeds cleanly in 1.73s, creating
+       properly code-split lazy chunks (Contact, Projects, TaskManager, index).
+  [OK] Frontend Linting: `npm run lint` executes cleanly via Oxlint across 37 files.
+  [OK] GitHub API Integration: `/projects` successfully requests GitHub REST API
+       (https://api.github.com/users/krinabhuva/repos), extracts star/fork counts,
+       and supports instant client-side text filtering.
+  [OK] Theme Switcher: Dark/Light mode toggle functions correctly, applying CSS class
+       `body.light-mode` and altering custom property tokens across components.
+  [OK] Mobile Navigation: Hamburger menu state toggles responsive slide-out nav links.
+  [OK] Interactive Canvas Animation: DigitalMindscape renders particle fields, orbs,
+       and responds to mouse movement while respecting `prefers-reduced-motion`.
+  [OK] Backend Cache Benchmarking: `npm run test:cache` executes with 87.89% latency
+       reduction (16.98 ms uncached -> 2.05 ms cached).
+  [OK] Backend EventEmitter Notification: `npm run test:events` runs successfully,
+       dispatches non-blocking async event alerts via `setImmediate()`.
+  [OK] Standalone API Verification: `node test-api-verification.js` passes 13/13 tests
+       covering registration, login, JWT protection, cache invalidation, and CRUD.
+  [OK] 404 Catch-All Routing: React client-side wildcard `*` route and Express 404
+       middleware both handle invalid URLs cleanly.
+  [OK] Docker Orchestration Config: `docker-compose.yml` declarations define healthchecks,
+       isolated network, named volumes, and host port mappings.
+
+3.2 Partially Working Features:
+  [PARTIAL] Hero Header Call-to-Action: `Header.jsx` contains an empty `.header-buttons`
+            container; no buttons exist to direct users to Projects or Contact.
+  [PARTIAL] Contact Form: Controlled input state works and displays real-time character
+            counts, but form has no submission button, validation, or backend endpoint.
+  [PARTIAL] Footer Navigation: Footer Quick Links (`#home`, `#about`, `#skills`) are only
+            rendered on `/contact`, but clicking them fails because those anchor targets
+            only exist on `/`.
+  [PARTIAL] Port Alignment: `vite.config.js` configures port 3000 (matching Docker),
+            whereas `README.md` documents `http://localhost:5173`.
+  [PARTIAL] Favicon Asset: `index.html` references `/favicon.svg`, but no `public/`
+            directory or favicon file exists in the repository, resulting in a 404.
+
+3.3 Broken Features:
+  [BROKEN] Frontend-to-Backend TaskManager Integration (HTTP 401 Unauthorized):
+           In `server/routes/taskRoutes.js`, all `/tasks` routes are protected with
+           `router.use(protect)` which requires a valid JWT Bearer token in the
+           Authorization header. However, `src/api.js` and `TaskManager.jsx` send
+           raw, unauthenticated HTTP requests without tokens. As a result, opening
+           `/tasks` in the browser fails with HTTP 401 ("Not authorized, token missing
+           or invalid format").
+  [BROKEN] Automated Test Suite Execution (`npm test`):
+           Neither root `package.json` nor `server/package.json` contains an `npm test`
+           script. Executing `npm test` terminates immediately with `Missing script: "test"`.
+  [BROKEN] Server Module Export & Test Isolation:
+           `server/server.js` calls `connectDB()` and `app.listen(PORT)` at the top
+           level on import and does not export `app`. If imported into a test runner
+           (Jest/Supertest), it attempts to start a duplicate HTTP server on port 5000
+           and aborts the process (`process.exit(1)`) if MongoDB is unreachable.
+  [BROKEN] Continuous Integration Pipeline:
+           No `.github/workflows/ci.yml` pipeline exists to run tests or linting on push.
+
+
+--------------------------------------------------------------------------------
+4. DISCOVERED ISSUES CATALOG
+--------------------------------------------------------------------------------
+ISSUE #1: Frontend TaskManager Fails with HTTP 401 Unauthorized
+  - Severity: HIGH
+  - Affected Files: src/api.js, src/components/TaskManager.jsx, server/routes/taskRoutes.js
+  - Evidence: TaskManager displays: "Not authorized, token missing or invalid format (Bearer token required)".
+    `server/routes/taskRoutes.js` enforces `router.use(protect)`. `src/api.js` sends requests
+    without an `Authorization` header.
+  - Likely Cause: Practical 7 backend introduced JWT authentication, but Practical 6 frontend
+    was never updated with a login interface or an Axios request interceptor to store and
+    attach JWT tokens.
+
+ISSUE #2: Missing `npm test` Script in Backend and Root manifests
+  - Severity: HIGH
+  - Affected Files: server/package.json, package.json
+  - Evidence: `npm test` outputs: `npm error Missing script: "test"`.
+  - Likely Cause: Testing scripts were named `test:cache` and `test:events`. Standard Jest
+    test runner script was never defined.
+
+ISSUE #3: `server.js` Lacks Module Export and Executes Top-Level Side Effects
+  - Severity: HIGH
+  - Affected Files: server/server.js
+  - Evidence: `server.js` ends with `app.listen(PORT, ...)` without `export default app`.
+    `connectDB()` is executed immediately on line 15.
+  - Likely Cause: Monolithic server setup designed strictly for CLI launch (`node server.js`),
+    preventing programmatic import by Supertest or CI test suites.
+
+ISSUE #4: Severe Dependency Security Vulnerabilities (Root & Backend)
+  - Severity: HIGH (1 Critical, 11 High across project)
+  - Affected Files: package.json, server/package.json, package-lock.json
+  - Evidence: `npm audit` reports critical IP spoofing in `proxy-addr` (1.1.0 - 2.0.7),
+    multiple prototype pollution and SSRF advisories in `axios` (1.0.0 - 1.19.0),
+    DoS in `body-parser` (<1.20.9), and DoS in `brace-expansion`.
+  - Likely Cause: Outdated transitive dependencies locked in `package-lock.json`.
+
+ISSUE #5: Misplaced Backend Dependencies in Root `package.json`
+  - Severity: MEDIUM
+  - Affected Files: package.json
+  - Evidence: Root `package.json` lists `express: "^5.2.1"`, `mongoose: "^9.9.1"`,
+    `dotenv: "^17.4.2"`, and `nodemon: "^3.1.14"`. None of these packages are imported
+    anywhere in `src/`.
+  - Likely Cause: Accidental `npm install express mongoose dotenv` run in repository root
+    instead of the `server/` subfolder.
+
+ISSUE #6: Missing Favicon Resource (`/favicon.svg`)
+  - Severity: MEDIUM
+  - Affected Files: index.html
+  - Evidence: `<link rel="icon" type="image/svg+xml" href="/favicon.svg" />` in `index.html`.
+    No `/favicon.svg` file or `public/` directory exists in the project.
+  - Likely Cause: Default Vite scaffold file was removed or never committed.
+
+ISSUE #7: Broken Quick Links in Footer on Non-Home Routes
+  - Severity: MEDIUM
+  - Affected Files: src/components/Footer.jsx
+  - Evidence: `Footer.jsx` attempts `document.querySelector('#home')?.scrollIntoView()`.
+    On `/contact`, `#home`, `#about`, and `#skills` do not exist in the DOM.
+  - Likely Cause: Quick Links were written assuming a single-page scrolling layout, but
+    Practical 8 converted the application to a multi-page routed SPA.
+
+ISSUE #8: Dead / Unused Component Code (`WatercolorPortrait.jsx`)
+  - Severity: LOW
+  - Affected Files: src/components/WatercolorPortrait.jsx, src/components/WatercolorPortrait.css
+  - Evidence: Zero references to `WatercolorPortrait` across all files in `src/`.
+  - Likely Cause: Experimental alternative hero visual left behind after creating `DigitalMindscape.jsx`.
+
+ISSUE #9: Empty CTA Button Container in Hero Header
+  - Severity: LOW
+  - Affected Files: src/components/Header.jsx
+  - Evidence: `<div className="header-buttons">\n\n\n</div>` (lines 36-39).
+  - Likely Cause: Placeholder tags remained after button code was refactored or deleted.
+
+ISSUE #10: Minor Linter Warnings in Oxlint
+  - Severity: LOW
+  - Affected Files: server/models/User.js, server/middleware/errorHandler.js, src/components/DigitalMindscape.jsx
+  - Evidence: 5 warnings: 2 unnecessary regex escapes in `User.js`, unused `next` parameters
+    in `errorHandler.js`, unused `tick` variable in `DigitalMindscape.jsx`.
+  - Likely Cause: Strict ESLint regex and unused-variable rule checks.
+
+ISSUE #11: Dev Server Port Discrepancy
+  - Severity: LOW
+  - Affected Files: vite.config.js, README.md
+  - Evidence: `vite.config.js` sets `port: 3000`. `README.md` documents `http://localhost:5173`.
+  - Likely Cause: Practical 11 updated `vite.config.js` for Docker port mapping without
+    updating the root documentation.
+
+ISSUE #12: Duplicate DOM Element IDs
+  - Severity: LOW
+  - Affected Files: src/components/Contact.jsx, src/components/Footer.jsx
+  - Evidence: Both `<section className="contact ... id="contact">` and
+    `<footer className="footer" id="contact">` declare `id="contact"`.
+  - Likely Cause: Copy-pasting section templates across components.
+
+
+--------------------------------------------------------------------------------
+5. ACTUAL COMMAND RESULTS, BUILD / TEST STATUS & ERRORS
+--------------------------------------------------------------------------------
+5.1 Frontend Linter (`npm run lint` in root):
+  - Exit Code: 0 (Success)
+  - Output Summary:
+    5 warnings, 0 errors across 37 files (completed in 202ms).
+    - Warning: unnecessary escape `\.` in server/models/User.js:19
+    - Warning: unused parameter `next` in server/middleware/errorHandler.js:4
+    - Warning: unused parameter `next` in server/middleware/errorHandler.js:16
+    - Warning: unused variable `tick` in src/components/DigitalMindscape.jsx:108
+
+5.2 Production Frontend Build (`npm run build` in root):
+  - Exit Code: 0 (Success)
+  - Output Summary:
+    Vite v8.1.4 built client environment in 1.73s:
+    - dist/index.html                      1.16 kB (gzip:  0.59 kB)
+    - dist/assets/profile-DYoUt-Uc.jpeg  159.73 kB
+    - dist/assets/Contact-CrqYE-IV.css     1.86 kB (gzip:  0.74 kB)
+    - dist/assets/Projects-BiidESTT.css    7.73 kB (gzip:  2.07 kB)
+    - dist/assets/TaskManager-DuQqVvjx.css 8.86 kB (gzip:  2.43 kB)
+    - dist/assets/index-DcXJPMhB.css      20.56 kB (gzip:  4.83 kB)
+    - dist/assets/Contact-Dc8b71Ga.js      1.85 kB (gzip:  0.67 kB)
+    - dist/assets/Projects-Cod8daIC.js     9.29 kB (gzip:  3.16 kB)
+    - dist/assets/TaskManager-DzxPbUCU.js 54.90 kB (gzip: 20.13 kB)
+    - dist/assets/index-Cqp915Pe.js      251.06 kB (gzip: 80.66 kB)
+
+5.3 Backend Cache Performance Test (`npm run test:cache` in server):
+  - Exit Code: 0 (Success)
+  - Output Summary:
+    Average Uncached Response Time: 16.984 ms
+    Average Cached Response Time:   2.057 ms
+    Latency Reduction:              87.89% faster (8.26x speedup)
+
+5.4 Backend EventEmitter Verification (`npm run test:events` in server):
+  - Exit Code: 0 (Success)
+  - Output Summary:
+    Test user registered and authenticated.
+    Task created with immediate HTTP 201 response (14 ms response duration).
+    'task-created' event emitted and handled asynchronously in setImmediate Check Phase.
+
+5.5 Standalone API Verification (`node test-api-verification.js` in server):
+  - Exit Code: 0 (Success)
+  - Output Summary:
+    13 of 13 integration checks passed:
+    - User registration: OK
+    - JWT login authentication: OK
+    - GET /tasks cache MISS (first call): OK
+    - GET /tasks cache HIT (second call): OK
+    - POST /tasks & cache invalidation: OK
+    - GET /tasks cache MISS after invalidation: OK
+    - GET /tasks/:id cache MISS & HIT: OK
+    - PUT /tasks/:id & dual cache invalidation: OK
+    - DELETE /tasks/:id: OK
+    - GET /debug/cache stats inspection: OK
+    - GET /debug/cache/benchmark: OK
+
+5.6 Security Audit (`npm audit` in root):
+  - Exit Code: 1 (Vulnerabilities Found)
+  - Output Summary:
+    12 vulnerabilities (1 moderate, 10 high, 1 critical).
+    Critical: proxy-addr (IP spoofing via IPv4-mapped IPv6 trust subnet).
+    High: axios (12 advisories including prototype pollution and SSRF).
+
+5.7 Security Audit (`npm audit` in server):
+  - Exit Code: 1 (Vulnerabilities Found)
+  - Output Summary:
+    8 vulnerabilities (5 low, 1 moderate, 1 high, 1 critical).
+    Critical: proxy-addr in express tree.
+    High: body-parser trailing-bytes DoS.
+
+5.8 Git Repository Status (`git status`, `git remote -v`):
+  - Remote URL: https://github.com/krinabhuva/Portfolio
+  - Active Branch: main (up to date with origin/main)
+  - Uncommitted Modified Files:
+    - src/api.js (VITE_API_URL dynamic proxy support)
+    - src/components/Spinner.css (formatting adjustments)
+    - vite.config.js (host 0.0.0.0 and /api proxy configuration)
+    - server/package.json & server/package-lock.json (installed jest & supertest)
+  - Untracked Files:
+    - .dockerignore, Dockerfile, docker-compose.yml, PRACTICAL11_README.md
+    - server/.dockerignore, server/Dockerfile
+
+
+--------------------------------------------------------------------------------
+6. MISSING FEATURES, UI/UX DEFICIENCIES, RESPONSIVE & DEPLOYMENT RISKS
+--------------------------------------------------------------------------------
+6.1 Missing Features:
+  - No frontend login/register forms or modal to authenticate users with the backend.
+  - No automated CI/CD pipeline (.github/workflows/ci.yml) to guard against regressions.
+  - No Jest/Supertest automated unit/integration test suite configured for `npm test`.
+  - No backend email or database persistence for contact form inquiries.
+
+6.2 UI / UX Deficiencies:
+  - Hero header has no Call-To-Action buttons, leaving a visually empty area below the intro.
+  - Clicking footer quick links while on the `/contact` page does not navigate back to Home.
+  - Browser console logs a 404 error on initial load due to missing favicon.svg.
+  - Light mode styling is partially implemented; some card borders and subtle text elements
+    exhibit lower contrast in light mode compared to dark mode.
+
+6.3 Responsive Issues:
+  - Very small mobile screens (< 360px): TaskManager header badge and filter tabs can wrap
+    into multiple lines, slightly compressing the task input row.
+  - Contact page cards have fixed top padding (`paddingTop: '120px'`) inline, which can
+    cause vertical overflow on short mobile landscape viewports.
+
+6.4 Deployment Risks:
+  - CI Environment Failure: GitHub Actions runners do not run MongoDB by default. Any test
+    that attempts an unmocked live MongoDB connection or calls `server.js` without
+    `NODE_ENV=test` guards will abort the CI job.
+  - Port Collisions in Production: Running both Vite dev server and Express on default ports
+    without reverse proxying can lead to CORS issues if `VITE_API_URL` is misconfigured.
+
+
+--------------------------------------------------------------------------------
+7. DEPENDENCY ANALYSIS
+--------------------------------------------------------------------------------
+7.1 Misplaced Dependencies in Root package.json:
+  - `express`: "^5.2.1" — Belongs ONLY in server/ (version conflict with server's Express 4.19.2).
+  - `mongoose`: "^9.9.1" — Belongs ONLY in server/ (version conflict with server's Mongoose 8.5.1).
+  - `dotenv`: "^17.4.2" — Belongs ONLY in server/.
+  - `nodemon`: "^3.1.14" — Belongs ONLY in server/ (devDependency).
+
+7.2 Missing Dependencies:
+  - `cross-env`: Recommended for backend package scripts to ensure environment variables
+    like `NODE_OPTIONS=--experimental-vm-modules` work seamlessly across Windows, macOS, and Linux.
+
+7.3 Unused Code / Dependencies:
+  - `WatercolorPortrait.jsx` and `WatercolorPortrait.css` are not imported anywhere in the project.
+  - `@types/react` and `@types/react-dom` in root devDependencies are not strictly required
+    for a pure JavaScript Vite project (though standard for IDE autocomplete).
+
+
+--------------------------------------------------------------------------------
+8. ISSUE VERIFICATION STATUS (CONFIRMED VS SUSPECTED VS UNTESTED)
+--------------------------------------------------------------------------------
+[CONFIRMED] Issue #1 (TaskManager 401 Unauthorized): Verified by code inspection of
+            taskRoutes.js line 15 (`router.use(protect)`) and api.js.
+[CONFIRMED] Issue #2 (Missing npm test script): Verified by running `npm test` and
+            inspecting both package.json manifests.
+[CONFIRMED] Issue #3 (server.js side-effects & missing export): Verified by code inspection
+            of server.js lines 15, 43, and end of file.
+[CONFIRMED] Issue #4 (Dependency vulnerabilities): Verified by running `npm audit` in root
+            and server.
+[CONFIRMED] Issue #5 (Misplaced dependencies in root): Verified by comparing root package.json
+            dependencies with src/ import statements.
+[CONFIRMED] Issue #6 (Missing favicon.svg): Verified by searching filesystem for favicon.svg
+            and checking index.html line 5.
+[CONFIRMED] Issue #7 (Footer links broken on /contact): Verified by inspecting Footer.jsx line 49.
+[CONFIRMED] Issue #8 (Unused WatercolorPortrait component): Verified by searching entire src/
+            directory for import references.
+[CONFIRMED] Issue #10 (Oxlint warnings): Verified by running `npm run lint`.
+[CONFIRMED] Issue #11 (Port discrepancy): Verified by comparing vite.config.js with README.md.
+[SUSPECTED] Contrast ratio issues on light-mode badges under strict WCAG AAA guidelines
+            (requires browser automated accessibility audit to measure exact color contrast).
+[UNTESTED] Docker Compose full multi-container runtime spin-up on host (Docker engine daemon
+           was not executed to preserve running environment).
+
+
+--------------------------------------------------------------------------------
+9. RECOMMENDED FIXES ORDERED BY PRIORITY & DEPENDENCY GRAPH
+--------------------------------------------------------------------------------
+Priority 1 (Critical for CI/CD & Build Pipeline):
+  - Fix A1: Export `app` from `server/server.js` and wrap `connectDB()` and `app.listen()`
+    in conditional checks (`if (process.env.NODE_ENV !== 'test')`).
+  - Fix A2: Add automated Jest + Supertest test file (`server/tests/task.test.js`) testing
+    `GET /tasks` with mocked/pre-cached data to eliminate live DB dependencies.
+  - Fix A3: Configure `"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"`
+    in `server/package.json`.
+  - Fix A4: Create `.github/workflows/ci.yml` triggering on push to `main` with steps:
+    checkout, setup-node, backend install, and `npm test`.
+
+Priority 2 (High - Core User Experience & Integration):
+  - Fix B1: Add JWT authentication handling or a development guest token mechanism to
+    `src/api.js` so that `TaskManager.jsx` can communicate with protected backend routes.
+  - Fix B2: Create `public/favicon.svg` to eliminate 404 console errors.
+
+Priority 3 (Medium - Codebase Cleanup & Security):
+  - Fix C1: Remove misplaced backend dependencies (`express`, `mongoose`, `dotenv`, `nodemon`)
+    from root `package.json`.
+  - Fix C2: Update vulnerable packages (`axios`, `body-parser`, `proxy-addr`) via `npm audit fix`.
+  - Fix C3: Fix Footer quick links in `Footer.jsx` to navigate using React Router `Link` to
+    `/#home`, `/#about`, `/#skills` when not on the home route.
+
+Priority 4 (Low - UI Polish & Linter Hygiene):
+  - Fix D1: Add Call-to-Action buttons ("View Projects", "Contact Me") inside `Header.jsx`.
+  - Fix D2: Remove unused `WatercolorPortrait.jsx` and `WatercolorPortrait.css`.
+  - Fix D3: Resolve 5 linter warnings in `User.js`, `errorHandler.js`, and `DigitalMindscape.jsx`.
+  - Fix D4: Align `README.md` documented port with `vite.config.js` (port 3000).
+
+Dependency Graph:
+  [Fix A1: server.js export & guards]
+         │
+         ▼
+  [Fix A2: server/tests/task.test.js]
+         │
+         ▼
+  [Fix A3: server/package.json "test" script]
+         │
+         ▼
+  [Fix A4: .github/workflows/ci.yml GitHub Actions]
+
+
+--------------------------------------------------------------------------------
+10. MASTER TASK TABLE
+--------------------------------------------------------------------------------
+| Task ID | Issue / Objective | Files Involved | Recommended Tool | Exact Action | Verification Method | Status |
+|:---|:---|:---|:---|:---|:---|:---|
+| TSK-01 | Export app & guard side-effects | server/server.js | Antigravity | Wrap connectDB & listen in NODE_ENV !== 'test' check; add export default app | Import app in node script without server starting | Pending |
+| TSK-02 | Add GET /tasks automated test | server/tests/task.test.js | Antigravity | Create Supertest test for GET /tasks expecting HTTP 200 without live DB | Run test via Jest CLI | Pending |
+| TSK-03 | Configure npm test script | server/package.json | Antigravity | Add "test" script using Jest with ESM flags | Execute `npm test` in server/ | Pending |
+| TSK-04 | Create GitHub Actions CI workflow | .github/workflows/ci.yml | Antigravity | Create CI YAML for push to main with checkout, node setup, npm test | Push commit & inspect GitHub Actions tab | Pending |
+| TSK-05 | Add Practical 12 docs to README | README.md | Antigravity | Add Practical 12 CI/CD section with repo status badge and verification steps | Inspect rendered markdown in IDE/browser | Pending |
+| TSK-06 | Fix TaskManager 401 auth failure | src/api.js, TaskManager.jsx | Antigravity | Add auth header support / demo token interceptor | Load /tasks in browser and verify HTTP 200 | Pending |
+| TSK-07 | Create missing favicon.svg | public/favicon.svg | Antigravity | Add clean SVG logo file in public/ folder | Load app in browser and check DevTools network tab | Pending |
+| TSK-08 | Clean misplaced root dependencies | package.json | Antigravity | Remove express, mongoose, dotenv, nodemon from root package.json | Run `npm run build` to verify no regressions | Pending |
+| TSK-09 | Fix Footer quick links navigation | src/components/Footer.jsx | Antigravity | Replace plain anchor scrolls with Link to /#home etc. | Click quick links on /contact page in browser | Pending |
+| TSK-10 | Populate Hero CTA buttons | src/components/Header.jsx | Antigravity | Add "View Projects" and "Contact Me" links to .header-buttons | Inspect Hero visually in browser | Pending |
+| TSK-11 | Clean dead component code | src/components/WatercolorPortrait.* | Antigravity | Delete unused WatercolorPortrait component and CSS | Run `npm run build` | Pending |
+| TSK-12 | Fix 5 Oxlint warnings | User.js, errorHandler.js, DigitalMindscape.jsx | Antigravity | Clean regex escapes, prefix unused variables with _ | Run `npm run lint` expecting 0 warnings | Pending |
+| TSK-13 | Align documentation ports | README.md | Antigravity | Update local URL references to port 3000 | Review README.md | Pending |
+
+
+--------------------------------------------------------------------------------
+11. WHAT WORKS CORRECTLY & MUST NOT BE BROKEN
+--------------------------------------------------------------------------------
+The following features are fully functional, stable, and must remain untouched
+during subsequent fixes and implementations:
+  1. Frontend Production Build Pipeline: `npm run build` producing optimized,
+     code-split chunks via Vite.
+  2. Live GitHub API Repository Fetching: Search filtering, repo cards, star/fork
+     badges, and error retry state in `Projects.jsx` and `RepoCard.jsx`.
+  3. DigitalMindscape Canvas Animation: Background simulation logic, parallax,
+     wave calculations, and reduced-motion event listeners.
+  4. Dark / Light Mode System: CSS custom property structure and body class toggle
+     mechanism.
+  5. Practical 9 Cache Optimization: `config/cache.js`, `taskController.js` cache
+     HIT/MISS logic, cache invalidation on writes, and `npm run test:cache`.
+  6. Practical 10 EventEmitter Worker: `notificationService.js` non-blocking async
+     dispatch on task creation and `npm run test:events`.
+  7. Standalone Verification Suites: `test-api-verification.js`, `test-performance.js`,
+     and `test-practical10.js`.
+  8. Existing Docker Configuration: `docker-compose.yml`, `Dockerfile`, and
+     `server/Dockerfile` container manifests.
+
+
+--------------------------------------------------------------------------------
+12. QUESTIONS & ACCESS REQUIREMENTS PREVENTING A COMPLETE AUDIT
+--------------------------------------------------------------------------------
+1. Authentication Architecture Strategy for Frontend:
+   Does the course curriculum require adding a full Login/Register UI screen in
+   React for Practical 7 integration, or should `src/api.js` automatically use a
+   demo/guest bearer token for academic evaluation of the TaskManager?
+2. Production Deployment Environment:
+   Is this application intended to be deployed to a cloud platform (e.g., Render,
+   Vercel, Railway, AWS ECS) or evaluated exclusively via local Docker Compose
+   and GitHub Actions?
+3. GitHub Repository Permissions:
+   To enable and verify the GitHub Actions CI workflow (Practical 12), write access
+   to push commits to `https://github.com/krinabhuva/Portfolio` on the `main`
+   branch will be required when the user executes git push.
+================================================================================
+                           END OF AUDIT REPORT
+================================================================================

@@ -145,3 +145,21 @@
     padding: 8px 18px;
   }
 }
+
+/* Light mode contrast enhancements */
+body.light-mode .about-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(6, 182, 212, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .about-card-value {
+  color: #0f172a;
+}
+
+body.light-mode .about-badge {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.35);
+  color: #0f172a;
+  font-weight: 600;
+}

@@ -7,7 +7,7 @@ export default function Contact() {
   const [showHelp, setShowHelp] = useState(false);
 
   return (
-    <section className="contact section" id="contact" style={{ minHeight: 'calc(100vh - var(--nav-height) - 100px)', paddingTop: '120px' }}>
+    <section className="contact section contact-page-section" id="contact">
       <div className="container">
         <h2 className="section-title">
           Contact <span className="highlight">Me</span>

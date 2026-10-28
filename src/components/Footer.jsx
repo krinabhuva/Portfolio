@@ -1,17 +1,32 @@
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Footer.css';
 
 export default function Footer({ contactInfo }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const isContactPage = location.pathname === '/contact';
 
-  const scrollTo = (e, href) => {
+  const handleSectionLink = (e, targetHash) => {
     e.preventDefault();
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    if (location.pathname === '/') {
+      const el = document.querySelector(targetHash);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate('/' + targetHash);
+      // Allow route change to finish before scrolling
+      setTimeout(() => {
+        const el = document.querySelector(targetHash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
   };
 
   return (
-    <footer className="footer" id="contact" style={!isContactPage ? { padding: '30px 0' } : {}}>
+    <footer className="footer" id="footer" style={!isContactPage ? { padding: '30px 0' } : {}}>
       <div className="container">
         {isContactPage && (
           <div className="footer-content">
@@ -33,10 +48,22 @@ export default function Footer({ contactInfo }) {
               </div>
 
               <div className="footer-socials">
-                <a href={contactInfo.github} target="_blank" rel="noopener noreferrer" className="social-icon" title="GitHub">
+                <a
+                  href={contactInfo.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon"
+                  title="GitHub"
+                >
                   {'</>'}
                 </a>
-                <a href={contactInfo.linkedin} target="_blank" rel="noopener noreferrer" className="social-icon" title="LinkedIn">
+                <a
+                  href={contactInfo.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon"
+                  title="LinkedIn"
+                >
                   in
                 </a>
               </div>
@@ -45,11 +72,29 @@ export default function Footer({ contactInfo }) {
             <div className="footer-right">
               <h3>Quick Links</h3>
               <div className="footer-links">
-                {['Home', 'About', 'Skills'].map((item) => (
-                  <a key={item} href={`#${item.toLowerCase()}`} className="footer-link" onClick={(e) => scrollTo(e, `#${item.toLowerCase()}`)}>
-                    {item}
-                  </a>
-                ))}
+                <Link to="/" className="footer-link">
+                  Home
+                </Link>
+                <Link to="/tasks" className="footer-link">
+                  Task Manager
+                </Link>
+                <Link to="/projects" className="footer-link">
+                  Projects
+                </Link>
+                <a
+                  href="#about"
+                  className="footer-link"
+                  onClick={(e) => handleSectionLink(e, '#about')}
+                >
+                  About Section
+                </a>
+                <a
+                  href="#skills"
+                  className="footer-link"
+                  onClick={(e) => handleSectionLink(e, '#skills')}
+                >
+                  Skills Section
+                </a>
               </div>
             </div>
           </div>
@@ -57,7 +102,11 @@ export default function Footer({ contactInfo }) {
 
         <div className="footer-bottom">
           <span className="footer-copyright">© 2026 Krina Bhuva. All rights reserved.</span>
-          <button className="back-to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top">
+          <button
+            className="back-to-top"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label="Back to top"
+          >
             ↑
           </button>
         </div>

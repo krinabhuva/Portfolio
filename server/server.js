@@ -11,8 +11,10 @@ import './services/notificationService.js'; // Initialize EventEmitter async not
 // Load environment variables from .env file
 dotenv.config();
 
-// Connect to MongoDB Database
-connectDB();
+// Connect to MongoDB Database (only outside test environment)
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -39,16 +41,21 @@ app.use(notFoundHandler);
 // Centralized Global Error Handler Middleware
 app.use(errorHandler);
 
-// Start Express Server
-app.listen(PORT, () => {
-  console.log(`=================================================`);
-  console.log(`  Practical 10 Task Manager API Server Running`);
-  console.log(`  Server URL: http://localhost:${PORT}`);
-  console.log(`  Auth Routes: POST /register, POST /login, GET /me`);
-  console.log(`  Protected Routes: GET/POST /tasks, GET/PUT/DELETE /tasks/:id`);
-  console.log(`  EventEmitter Service: Active ('task-created' listener ready)`);
-  console.log(`  Cache Debug Routes: GET /debug/cache, DELETE /debug/cache`);
-  console.log(`=================================================`);
-});
+// Start Express Server (only outside test environment)
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`=================================================`);
+    console.log(`  Practical 10 Task Manager API Server Running`);
+    console.log(`  Server URL: http://localhost:${PORT}`);
+    console.log(`  Auth Routes: POST /register, POST /login, GET /me`);
+    console.log(`  Protected Routes: GET/POST /tasks, GET/PUT/DELETE /tasks/:id`);
+    console.log(`  EventEmitter Service: Active ('task-created' listener ready)`);
+    console.log(`  Cache Debug Routes: GET /debug/cache, DELETE /debug/cache`);
+    console.log(`=================================================`);
+  });
+}
+
+export default app;
+export { app };
 
 

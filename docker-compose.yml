@@ -1,0 +1,91 @@
+# ==============================================================================
+# Practical 11: Multi-Container Orchestration for Task Management Application
+# Services: mongo (MongoDB Database), backend (Express API), frontend (React/Vite)
+# ==============================================================================
+
+name: practical11-taskmanager
+
+services:
+  # ----------------------------------------------------------------------------
+  # 1. MongoDB Database Container
+  # ----------------------------------------------------------------------------
+  mongo:
+    image: mongo:7.0
+    container_name: taskmanager-mongo
+    restart: unless-stopped
+    ports:
+      - "27018:27017" # Host 27018 -> Container 27017 (prevents host port conflict)
+    environment:
+      - MONGO_INITDB_DATABASE=taskmanager
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - taskmanager-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ----------------------------------------------------------------------------
+  # 2. Node.js + Express REST API Backend Container
+  # ----------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: taskmanager-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000" # Host 5000 -> Container 5000
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/taskmanager
+      - JWT_SECRET=practical11_docker_jwt_secret_key_2026
+      - NODE_ENV=production
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - taskmanager-network
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:5000/debug/cache').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ----------------------------------------------------------------------------
+  # 3. React + Vite Web Frontend Container
+  # ----------------------------------------------------------------------------
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: taskmanager-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000" # Host 3000 -> Container 3000
+    environment:
+      - VITE_BACKEND_URL=http://backend:5000
+      - VITE_API_URL=/api
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - taskmanager-network
+
+# ------------------------------------------------------------------------------
+# Persistent Volume Configuration
+# ------------------------------------------------------------------------------
+volumes:
+  mongo_data:
+    driver: local
+
+# ------------------------------------------------------------------------------
+# Isolated Bridge Network Configuration
+# ------------------------------------------------------------------------------
+networks:
+  taskmanager-network:
+    driver: bridge

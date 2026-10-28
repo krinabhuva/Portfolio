@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import profileImg from '../assets/profile.jpeg';
 import './Header.css';
 
@@ -34,8 +35,12 @@ export default function Header({ name, role, themeColor }) {
               and database systems.
             </p>
             <div className="header-buttons">
-
-
+              <Link to="/projects" className="btn btn-primary">
+                View Projects
+              </Link>
+              <Link to="/contact" className="btn btn-secondary">
+                Contact Me
+              </Link>
             </div>
           </div>
           <div className="header-image">

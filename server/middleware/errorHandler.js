@@ -1,7 +1,7 @@
 /**
  * 404 Not Found Middleware for handling non-existent endpoints
  */
-export const notFoundHandler = (req, res, next) => {
+export const notFoundHandler = (req, res, _next) => {
   res.status(404).json({
     success: false,
     message: `Route not found: ${req.method} ${req.originalUrl}`,
@@ -13,7 +13,7 @@ export const notFoundHandler = (req, res, next) => {
  * Global Centralized Error Handling Middleware
  * Handles Mongoose ValidationErrors, CastErrors, Duplicate Key Errors, and general server exceptions
  */
-export const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, req, res, _next) => {
   console.error('[GLOBAL ERROR HANDLER]', err);
 
   let statusCode = err.status || err.statusCode || 500;

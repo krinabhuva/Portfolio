@@ -105,7 +105,7 @@ export default function DigitalMindscape() {
 
   /* ─── Render single frame ──────────────────────────────────── */
   const drawFrame = useCallback((ctx, s) => {
-    const { w, h, orbs, waves, particles, beams, tick, parallaxOffset } = s;
+    const { w, h, orbs, waves, particles, beams, parallaxOffset } = s;
     const px = parallaxOffset.x;
     const py = parallaxOffset.y;
 
