@@ -8,6 +8,16 @@ Welcome to the **Portfolio & Academic Practicals** repository created by **Krina
 
 ## 🚀 Practicals Overview
 
+### 📍 Practical 13: AI API Integration (OpenAI gpt-4o-mini)
+- **AI Task Description Generator**: Integrates OpenAI API (`openai`, model `gpt-4o-mini`) to generate concise, actionable task descriptions from task titles.
+- **Backend Endpoint**: `POST /api/ai/generate-description` (and `/ai/generate-description` for proxy compatibility) accepting `{ title }` and returning `{ success, description, model, fallback, disclaimer }`.
+- **Secret Management**: `OPENAI_API_KEY` stored strictly in backend `.env` (verified in `.gitignore`), never leaked or committed.
+- **Per-Task Rate Limiting**: Built-in middleware enforcing maximum 1 AI request per task per minute (HTTP 429 Too Many Requests with `Retry-After` header).
+- **Graceful Error Handling & Fallbacks**: Recovers from missing keys, quota limits, timeouts, and network failures with smart rule-based fallback descriptions; normal task CRUD remains 100% operational.
+- **Frontend UI**: "✨ Generate Description" button in task form with loading spinner, cooldown timer, editable description field, and visible disclaimer: *"AI-generated suggestion. Review before using."*
+- **Automated Tests**: Comprehensive test suite in `server/tests/ai.test.js` validating input validation, gpt-4o-mini generation, rate limiting, and fallback behavior.
+- **Documentation**: Detailed guide and API spec available in [`PRACTICAL13_README.md`](file:///d:/5IT/AWD/Portfolio/PRACTICAL13_README.md).
+
 ### 📍 Practical 12: CI/CD Pipeline with GitHub Actions
 - **Continuous Integration**: Automated CI pipeline defined in `.github/workflows/ci.yml` triggered on every push and pull request to the `main` branch.
 - **Automated Testing**: Powered by **Jest** and **Supertest** for testing REST API endpoints (`server/tests/task.test.js`).

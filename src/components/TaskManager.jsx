@@ -9,6 +9,7 @@ import {
   loginUser,
   registerUser,
   logoutUser,
+  generateTaskDescription,
 } from '../api';
 import './TaskManager.css';
 
@@ -28,11 +29,20 @@ export default function TaskManager() {
 
   // New task form state
   const [newTitle, setNewTitle] = useState('');
+  const [newDescription, setNewDescription] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiGenerated, setAiGenerated] = useState(false);
+  const [aiError, setAiError] = useState(null);
+  const [aiCooldown, setAiCooldown] = useState(0);
 
   // Edit task state
   const [editingId, setEditingId] = useState(null);
   const [editTitle, setEditTitle] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [editAiGenerating, setEditAiGenerating] = useState(false);
+  const [editAiGenerated, setEditAiGenerated] = useState(false);
+  const [editAiError, setEditAiError] = useState(null);
 
   // Delete modal state
   const [deleteModal, setDeleteModal] = useState({ open: false, task: null });
@@ -92,6 +102,15 @@ export default function TaskManager() {
     }
   }, []);
 
+  // Practical 13: Rate limit cooldown timer for AI description generator
+  useEffect(() => {
+    if (aiCooldown <= 0) return;
+    const timer = setInterval(() => {
+      setAiCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [aiCooldown]);
+
   // Authentication submission handler (Login or Register)
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
@@ -141,6 +160,71 @@ export default function TaskManager() {
     showToast('Signed out successfully.', 'success');
   };
 
+  // Handler: Generate AI description for new task (Practical 13)
+  const handleGenerateDescription = async () => {
+    const trimmedTitle = newTitle.trim();
+    if (!trimmedTitle) {
+      showToast('Please enter a task title first to generate an AI description', 'error');
+      return;
+    }
+
+    setAiGenerating(true);
+    setAiError(null);
+    try {
+      const response = await generateTaskDescription(trimmedTitle);
+      if (response && response.description) {
+        setNewDescription(response.description);
+        setAiGenerated(true);
+        setAiError(null);
+        showToast('✨ AI description generated successfully!', 'success');
+      }
+    } catch (err) {
+      console.error('AI generation error:', err);
+      const isRateLimit = err.response?.status === 429 && err.response?.data?.retryAfter;
+      const retryAfter = err.response?.data?.retryAfter || 60;
+      const errMsg = err.response?.data?.message || err.message || 'Failed to generate AI description';
+
+      if (isRateLimit) {
+        setAiCooldown(retryAfter);
+      }
+
+      setAiGenerated(false);
+      setAiError(errMsg);
+      showToast(errMsg, 'error');
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
+  // Handler: Generate AI description in edit mode (Practical 13)
+  const handleEditGenerateDescription = async (taskId) => {
+    const trimmedTitle = editTitle.trim();
+    if (!trimmedTitle) {
+      showToast('Please enter a task title first to generate an AI description', 'error');
+      return;
+    }
+
+    setEditAiGenerating(true);
+    setEditAiError(null);
+    try {
+      const response = await generateTaskDescription(trimmedTitle, taskId);
+      if (response && response.description) {
+        setEditDescription(response.description);
+        setEditAiGenerated(true);
+        setEditAiError(null);
+        showToast('✨ AI description regenerated!', 'success');
+      }
+    } catch (err) {
+      console.error('AI generation edit error:', err);
+      const errMsg = err.response?.data?.message || err.message || 'Failed to generate AI description';
+      setEditAiGenerated(false);
+      setEditAiError(errMsg);
+      showToast(errMsg, 'error');
+    } finally {
+      setEditAiGenerating(false);
+    }
+  };
+
   // Handler: Add a new task (POST /tasks)
   const handleAddTask = async (e) => {
     e.preventDefault();
@@ -154,12 +238,16 @@ export default function TaskManager() {
     try {
       const response = await createTask({
         title: trimmedTitle,
+        description: newDescription.trim(),
         completed: false,
       });
 
       if (response.success || response.data || response._id) {
         showToast('Task added successfully!', 'success');
         setNewTitle('');
+        setNewDescription('');
+        setAiGenerated(false);
+        setAiError(null);
         await fetchTasks(false);
       }
     } catch (err) {
@@ -203,12 +291,16 @@ export default function TaskManager() {
     try {
       const response = await updateTask(taskId, {
         title: trimmedTitle,
+        description: editDescription.trim(),
       });
 
       if (response.success || response.data || response._id) {
-        showToast('Task title updated successfully!', 'success');
+        showToast('Task updated successfully!', 'success');
         setEditingId(null);
         setEditTitle('');
+        setEditDescription('');
+        setEditAiGenerated(false);
+        setEditAiError(null);
         await fetchTasks(false);
       }
     } catch (err) {
@@ -221,13 +313,19 @@ export default function TaskManager() {
   // Handler: Start editing mode
   const startEditing = (task) => {
     setEditingId(task._id);
-    setEditTitle(task.title);
+    setEditTitle(task.title || '');
+    setEditDescription(task.description || '');
+    setEditAiGenerated(false);
+    setEditAiError(null);
   };
 
   // Handler: Cancel editing mode
   const cancelEditing = () => {
     setEditingId(null);
     setEditTitle('');
+    setEditDescription('');
+    setEditAiGenerated(false);
+    setEditAiError(null);
   };
 
   // Handler: Open delete modal
@@ -384,6 +482,7 @@ export default function TaskManager() {
             <div className="header-title-wrap">
               <h1 className="task-title">Practical 6: Task Manager</h1>
               <span className="badge-tech">React + Express + MongoDB</span>
+              <span className="badge-tech badge-ai">✨ Practical 13: AI Integration (gpt-4o-mini)</span>
             </div>
             <p className="task-subtitle">
               Full-Stack REST API CRUD operations with Axios, JWT authentication, and persistent MongoDB storage.
@@ -406,20 +505,89 @@ export default function TaskManager() {
             </div>
           </div>
 
-          {/* Add Task Input Form */}
+          {/* Add Task Input Form with AI Description Generator */}
           <form onSubmit={handleAddTask} className="add-task-form">
             <div className="input-group">
               <input
                 type="text"
-                placeholder="What needs to be done?"
+                placeholder="What needs to be done? (e.g., Deploy container to Kubernetes)"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 className="task-input"
                 disabled={submitting}
               />
+              <button
+                type="button"
+                className="btn btn-ai-generate"
+                onClick={handleGenerateDescription}
+                disabled={submitting || aiGenerating || aiCooldown > 0}
+                title="Generate an AI task description using OpenAI gpt-4o-mini"
+              >
+                {aiGenerating ? (
+                  <>
+                    <span className="ai-btn-spinner"></span>
+                    <span>Generating...</span>
+                  </>
+                ) : aiCooldown > 0 ? (
+                  <span>⏳ Cooldown ({aiCooldown}s)</span>
+                ) : (
+                  <span>✨ Generate Description</span>
+                )}
+              </button>
               <button type="submit" className="btn btn-add" disabled={submitting}>
                 {submitting ? 'Adding...' : '+ Add Task'}
               </button>
+            </div>
+
+            {/* Editable Description Field & Visible AI Disclaimer */}
+            <div className="task-description-wrapper">
+              <div className="description-label-row">
+                <label htmlFor="new-task-description" className="description-label">
+                  Task Description (Editable):
+                </label>
+                {aiGenerated && (
+                  <span className="ai-badge-indicator">
+                    ✨ AI Suggestion Generated
+                  </span>
+                )}
+              </div>
+              <textarea
+                id="new-task-description"
+                rows={2}
+                placeholder="Enter description, or click 'Generate Description' for an AI-generated suggestion..."
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+                className="task-description-textarea"
+                disabled={submitting}
+              />
+
+              {/* Clear AI Error Alert Banner */}
+              {aiError && (
+                <div className="ai-error-box" role="alert">
+                  <span className="ai-error-icon">⚠️</span>
+                  <div className="ai-error-message">
+                    <strong>AI Error:</strong> {aiError}
+                  </div>
+                  <button
+                    type="button"
+                    className="ai-error-dismiss"
+                    onClick={() => setAiError(null)}
+                    title="Dismiss alert"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+
+              {/* Visible disclaimer when AI suggestion is generated */}
+              {aiGenerated && !aiError && (
+                <div className="ai-disclaimer-note" role="note">
+                  <span className="disclaimer-icon">ℹ️</span>
+                  <span className="disclaimer-text">
+                    AI-generated suggestion. Review before using.
+                  </span>
+                </div>
+              )}
             </div>
           </form>
 
@@ -489,17 +657,62 @@ export default function TaskManager() {
                     {editingId === task._id ? (
                       // Inline Edit Mode
                       <div className="edit-mode-container">
-                        <input
-                          type="text"
-                          value={editTitle}
-                          onChange={(e) => setEditTitle(e.target.value)}
-                          className="edit-input"
-                          autoFocus
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') handleSaveEdit(task._id);
-                            if (e.key === 'Escape') cancelEditing();
-                          }}
-                        />
+                        <div className="edit-fields-stack">
+                          <input
+                            type="text"
+                            value={editTitle}
+                            onChange={(e) => setEditTitle(e.target.value)}
+                            className="edit-input"
+                            placeholder="Task title"
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' && !e.shiftKey) handleSaveEdit(task._id);
+                              if (e.key === 'Escape') cancelEditing();
+                            }}
+                          />
+                          <div className="edit-desc-row">
+                            <textarea
+                              rows={2}
+                              value={editDescription}
+                              onChange={(e) => setEditDescription(e.target.value)}
+                              className="edit-textarea"
+                              placeholder="Task description (editable)"
+                            />
+                            <button
+                              type="button"
+                              className="btn btn-ai-generate btn-ai-edit"
+                              onClick={() => handleEditGenerateDescription(task._id)}
+                              disabled={editAiGenerating}
+                              title="Regenerate description using OpenAI gpt-4o-mini"
+                            >
+                              {editAiGenerating ? '✨...' : '✨ AI Suggest'}
+                            </button>
+                          </div>
+                          {editAiError && (
+                            <div className="ai-error-box edit-ai-error-box" role="alert">
+                              <span className="ai-error-icon">⚠️</span>
+                              <div className="ai-error-message">
+                                <strong>AI Error:</strong> {editAiError}
+                              </div>
+                              <button
+                                type="button"
+                                className="ai-error-dismiss"
+                                onClick={() => setEditAiError(null)}
+                                title="Dismiss alert"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          )}
+                          {editAiGenerated && !editAiError && (
+                            <div className="ai-disclaimer-note edit-disclaimer-note">
+                              <span className="disclaimer-icon">ℹ️</span>
+                              <span className="disclaimer-text">
+                                AI-generated suggestion. Review before using.
+                              </span>
+                            </div>
+                          )}
+                        </div>
                         <div className="edit-actions">
                           <button
                             onClick={() => handleSaveEdit(task._id)}
@@ -529,14 +742,21 @@ export default function TaskManager() {
                             />
                             <span className="checkmark"></span>
                           </label>
-                          <span
-                            className={`task-text ${
-                              task.completed ? 'completed-text' : ''
-                            }`}
-                            onClick={() => handleToggleComplete(task)}
-                          >
-                            {task.title}
-                          </span>
+                          <div className="task-content">
+                            <span
+                              className={`task-text ${
+                                task.completed ? 'completed-text' : ''
+                              }`}
+                              onClick={() => handleToggleComplete(task)}
+                            >
+                              {task.title}
+                            </span>
+                            {task.description && (
+                              <p className="task-description-preview">
+                                {task.description}
+                              </p>
+                            )}
+                          </div>
                         </div>
 
                         <div className="task-right">

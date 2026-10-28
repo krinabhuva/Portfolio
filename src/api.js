@@ -181,4 +181,19 @@ export const deleteTask = async (id) => {
   return response.data;
 };
 
+// ——— AI API Methods (Practical 13) ———
+
+/**
+ * Generate AI task description using OpenAI gpt-4o-mini (POST /ai/generate-description)
+ * @param {string} title - Task title to generate description for
+ * @param {string} [taskId] - Optional Task ID for existing tasks
+ * @returns {Promise<Object>} API response payload containing { success, description, fallback, message, disclaimer }
+ */
+export const generateTaskDescription = async (title, taskId = null) => {
+  const payload = { title: title.trim() };
+  if (taskId) payload.taskId = taskId;
+  const response = await api.post('/ai/generate-description', payload);
+  return response.data;
+};
+
 export default api;

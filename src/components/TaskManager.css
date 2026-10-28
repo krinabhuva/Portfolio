@@ -828,3 +828,306 @@ body.light-mode .auth-form-group label {
   margin-bottom: 16px;
 }
 
+/* ==============================================================================
+   Practical 13: AI API Integration Styling (OpenAI gpt-4o-mini)
+   ============================================================================== */
+
+.badge-ai {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.35);
+}
+
+body.light-mode .badge-ai {
+  background: rgba(147, 51, 234, 0.1);
+  color: #7e22ce;
+  border-color: rgba(147, 51, 234, 0.25);
+}
+
+/* AI Generate Button */
+.btn-ai-generate {
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  color: #ffffff;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+}
+
+.btn-ai-generate:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6d28d9 0%, #4338ca 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+}
+
+.btn-ai-generate:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-ai-generate:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Button Spinner */
+.ai-btn-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: ai-spin 0.8s linear infinite;
+}
+
+@keyframes ai-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Description Form Wrapper */
+.task-description-wrapper {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.description-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.description-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary, #94a3b8);
+}
+
+body.light-mode .description-label {
+  color: #475569;
+}
+
+.ai-badge-indicator {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.12);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+body.light-mode .ai-badge-indicator {
+  color: #7e22ce;
+  background: rgba(126, 34, 206, 0.08);
+}
+
+.task-description-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text-primary, #f8fafc);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 58px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.task-description-textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+body.light-mode .task-description-textarea {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+body.light-mode .task-description-textarea:focus {
+  border-color: #6366f1;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* AI Visible Disclaimer Note */
+.ai-disclaimer-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #c4b5fd;
+  width: fit-content;
+  max-width: 100%;
+}
+
+body.light-mode .ai-disclaimer-note {
+  background: rgba(109, 40, 217, 0.05);
+  border-color: rgba(109, 40, 217, 0.18);
+  color: #5b21b6;
+}
+
+.disclaimer-icon {
+  font-size: 0.85rem;
+}
+
+.disclaimer-text {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Task Content and Description Preview in Task List */
+.task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.task-description-preview {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--text-secondary, #94a3b8);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+body.light-mode .task-description-preview {
+  color: #64748b;
+}
+
+.task-item.completed .task-description-preview {
+  color: #64748b;
+  opacity: 0.7;
+}
+
+body.light-mode .task-item.completed .task-description-preview {
+  color: #94a3b8;
+}
+
+/* Inline Edit Stacking */
+.edit-fields-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  width: 100%;
+}
+
+.edit-desc-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.edit-textarea {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  resize: vertical;
+}
+
+body.light-mode .edit-textarea {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.btn-ai-edit {
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  border-radius: 8px;
+}
+
+.edit-disclaimer-note {
+  margin-top: 2px;
+}
+
+/* AI Generation Error Alert Box */
+.ai-error-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #fca5a5;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  margin-top: 4px;
+  animation: fadeIn 0.25s ease;
+}
+
+body.light-mode .ai-error-box {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.ai-error-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ai-error-message {
+  flex: 1;
+  word-break: break-word;
+}
+
+.ai-error-dismiss {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.ai-error-dismiss:hover {
+  opacity: 1;
+}
+
+.edit-ai-error-box {
+  margin-top: 4px;
+}
+
+
+
