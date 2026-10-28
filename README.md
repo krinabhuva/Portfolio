@@ -32,6 +32,11 @@ Welcome to the **Portfolio & Academic Practicals** repository created by **Krina
 - **Performance**: Reduced API read response times from **~39 ms (MongoDB query)** to **~1.9 ms (in-memory lookup)**, achieving an **88.6% latency reduction** (8.8x speedup).
 - **Documentation**: Comprehensive architecture, cache flow, and benchmark tables available in [`PRACTICAL9_README.md`](file:///d:/5IT/AWD/Portfolio/PRACTICAL9_README.md).
 
+### 📍 Practical 8: React Code-Splitting, Lazy Loading & Suspense
+- **Frontend Optimization**: Dynamic route code-splitting implemented using `React.lazy()` and `Suspense` for heavy components (`Projects`, `Contact`, `TaskManager`).
+- **Loading State**: Dedicated fallback component (`Loading.jsx` wrapping animated `Spinner`) displayed during asynchronous chunk fetches.
+- **Performance Impact**: Reduced initial bundle footprint and critical load time by deferring chunk downloads until user navigation.
+
 ### 📍 Practical 7: JWT Authentication & Input Validation
 - **Backend**: Express + MongoDB Task Management API upgraded with JWT Bearer Token Authentication, bcryptjs password hashing, route protection middleware (`protect`), input title validation, and profile management (`/me`).
 - **Frontend Integration**: Dedicated sign-in and account registration UI in `TaskManager.jsx` with automatic token persistence in localStorage and Axios authorization interceptor.
@@ -49,6 +54,21 @@ Welcome to the **Portfolio & Academic Practicals** repository created by **Krina
 
 ### 📍 Practical 4: Node.js & Express RESTful API
 - **Backend**: Express REST API baseline with in-memory storage, logging middleware, and custom 404 handler.
+
+### 📍 Practical 3: GitHub REST API Integration & Dynamic UI States
+- **Frontend Integration**: Connected React portfolio to live GitHub REST API (`https://api.github.com/users/krinabhuva/repos`).
+- **Features**: Asynchronous data fetching in `useEffect`, custom loading spinner (`Spinner.jsx`), error state card with retry button (`ErrorMessage.jsx`), dynamic repository cards with star/fork badges and direct repo links (`RepoCard.jsx`), and real-time client-side search filtering.
+
+### 📍 Practical 2: React State, Controlled Forms & Client-Side Routing
+- **Routing**: Multi-page client-side SPA routing with `react-router-dom` (`/`, `/projects`, `/contact`, `*` 404 fallback via `NotFound.jsx`).
+- **State Management**: Controlled form implementation in `Contact.jsx` with real-time two-way data binding, live character counter, display preview box, and interactive "Show Help" toggle.
+- **Theming**: Dark/Light mode theme toggle using `useState` and `useEffect` with dynamic body class switching.
+- **Mobile UX**: Responsive hamburger menu drawer.
+
+### 📍 Practical 1: Personal Portfolio React Application
+- **Frontend**: Foundation single-page React portfolio scaffolded with Vite.
+- **Architecture**: Modular component hierarchy (`Navbar`, `Header`, `About`, `Skills`, `Projects`, `Footer`) utilizing props for unidirectional data flow.
+- **Design System**: Vanilla CSS styling featuring CSS custom properties (tokens), glassmorphism, responsive grid breakpoints, and modern typography.
 
 ---
 
